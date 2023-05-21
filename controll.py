@@ -99,7 +99,9 @@ def main():
                                 print(members.availibility())
                         case "nextAvailible":
                             if (len(ops) < 3):
-                                continue
+                                cal = calendarAPI.memberCalendars()
+                                cal.load()
+                                print(cal.nextAvailible())
                             name = ops[2]
                             for member in getMembers(name):
                                 calendar = calendarAPI.calendar()
