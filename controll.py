@@ -102,6 +102,7 @@ def main():
                                 cal = calendarAPI.memberCalendars()
                                 cal.load()
                                 print(cal.nextAvailible())
+                                continue
                             name = ops[2]
                             for member in getMembers(name):
                                 calendar = calendarAPI.calendar()
