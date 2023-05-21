@@ -1,0 +1,5 @@
+*.pyc
+main.py
+credentials.json
+members.json
+token.json
