@@ -3,3 +3,5 @@ main.py
 credentials.json
 members.json
 token.json
+.vscode
+__pycache__
