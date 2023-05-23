@@ -124,5 +124,9 @@ def getMembers(name):
             nameMembers.append(member)
     return nameMembers
 
+def saveMembers(members):
+    with open("members.json", "w") as outfile:
+        outfile.write(json.dumps(members, indent=4))
+
 if __name__ == "__main__":
     main()
