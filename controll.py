@@ -63,6 +63,20 @@ def main():
                             with open("members.json", "w") as outfile:
                                 outfile.write(json.dumps(membersJson, indent=4))
                             calendar.invite(member[2])
+                        case "rename":
+                            if len(ops) < 4:
+                                print("give the name and the new name of the member.")
+                                continue
+                            members = open("members.json")
+                            members = json.load(members)
+                            for member in getMembers(ops[2]):
+                                calendar = calendarAPI.calendar()
+                                calendar.id = member["calendarID"]
+                                calendar.rename(ops[3])
+                                members.remove(member)
+                                member["name"] = ops[3]
+                                members.append(member)
+                            saveMembers(members)
                         case "show":
                             if len(ops) < 3:
                                 print("give the name of the member you want to show")
