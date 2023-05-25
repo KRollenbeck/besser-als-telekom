@@ -118,6 +118,8 @@ def console(input) -> bool:
 
 
 class controll:
+    def loadMembers() -> dict:
+        return json.load(open("members.json"))
     def getMember(name: str) -> dict:
         members = open("members.json")
         members = json.load(members)
