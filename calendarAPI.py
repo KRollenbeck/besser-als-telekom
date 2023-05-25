@@ -75,12 +75,6 @@ class calendar:
         }
         created_rule = self.service.acl().insert(calendarId=self.id, body=rule).execute()
         print (created_rule['id'])
-    def rename(self, name):
-        self.connect()
-        calendar = self.service.calendars().get(calendarId=self.id).execute()
-        calendar['summary'] = name
-        updated_calendar = self.service.calendars().update(calendarId=calendar['id'], body=calendar).execute()
-
 class memberCalendars:
     def load(self):
         self.members = []
