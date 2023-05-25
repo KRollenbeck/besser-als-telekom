@@ -20,25 +20,18 @@ def console(input) -> bool:
                             print("give name as parameter to delete a member")
                             return
                         controll.remove(ops[2])
-                        with open("members.json", "w") as outfile:
-                            outfile.write(json.dumps(members, indent=4))
                     case "add":
                         if len(ops) < 3:
                             print("give the name,phoneNumber,gmail of the member")
                             return
                         member = ops[2].split(",")
-                        if len(member) < 3:
-                            print("give the name,phoneNumber,gmail of the member")
+                        if len(member) < 2:
+                            print("give the name,phoneNumber")
                             return
-                        members = open("members.json")
-                        membersJson = json.load(members)
-                        members.close()
-                        calendar = calendarAPI.calendar()
-                        calendar.create(member[0])
-                        membersJson.append({"name":member[0].lower(), "phoneNumber":member[1], "calendarID":calendar.id, "gmail":member[2]})
-                        with open("members.json", "w") as outfile:
-                            outfile.write(json.dumps(membersJson, indent=4))
-                        calendar.invite(member[2])
+                        if len(member) == 2:
+                            controll.add(member[0], member[1])
+                        else:
+                            controll.add(member[0], member[1], member[2])
                     case "rename":
                         if len(ops) < 4:
                             print("give the name and the new name of the member.")
@@ -129,10 +122,29 @@ class controll:
             controll.saveMembers(members)
     def remove(name: str):
         members = controll.loadMembers()
-        member = controll.getMember()
+        member = controll.getMember(name)
+        calendar = calendarAPI.calendar()
+        calendar.id = member["calendarID"]
+        calendar.delete()
         if member != None:
             members.remove(member)
         controll.saveMembers(members)
+    def add(name: str, phoneNumber: str, gmail: str = None, invite=True) -> dict:
+        if controll.getMember(name) == None:
+            member = {"name": name, "phoneNumber": phoneNumber, "gmail": None}
+            calendar = calendarAPI.calendar()
+            calendar.create(name)
+            member["calendarID"] = calendar.id
+            if gmail != None:
+                member["gmail"] = gmail
+                if invite:
+                    calendar.invite(gmail)
+            members  = controll.loadMembers()
+            members.append(member)
+            controll.saveMembers(members)
+            return member
+        else:
+            return None
 
 if __name__ == "__main__":
     while True:
