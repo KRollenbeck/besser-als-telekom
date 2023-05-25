@@ -15,22 +15,11 @@ def console(input) -> bool:
                             print("give the name of the member and the changes")
                             return
                         controll.change(ops[2], ops[3].split(","),True)
-                    case "delete":
+                    case "remove":
                         if len(ops) < 3:
                             print("give name as parameter to delete a member")
                             return
-                        members = open("members.json")
-                        members = json.load(members)
-                        name = ops[2].lower()
-                        i = 0
-                        for member in members:
-                            if member["name"] == name:
-                                calendar = calendarAPI.calendar()
-                                calendar.id = member["calendarID"]
-                                calendar.delete()
-                                del members[i]
-                                i -= 1
-                            i += 1
+                        controll.remove(ops[2])
                         with open("members.json", "w") as outfile:
                             outfile.write(json.dumps(members, indent=4))
                     case "add":
@@ -121,18 +110,16 @@ class controll:
     def loadMembers() -> dict:
         return json.load(open("members.json"))
     def getMember(name: str) -> dict:
-        members = open("members.json")
-        members = json.load(members)
+        members = controll.loadMembers()
         for member in members:
             if member["name"] == name:
                 return member
         return None
-    def saveMembers(members):
+    def saveMembers(members: dict):
         with open("members.json", "w") as outfile:
             outfile.write(json.dumps(members, indent=4))
     def change(name: str, attr: list[str], save = True) -> dict:
-        members = open("members.json")
-        members = json.load(members)
+        members = controll.loadMembers()
         member = controll.getMember(name)
         members.remove(member)
         for change in attr:
@@ -140,6 +127,12 @@ class controll:
         members.append(member)  
         if save:
             controll.saveMembers(members)
+    def remove(name: str):
+        members = controll.loadMembers()
+        member = controll.getMember()
+        if member != None:
+            members.remove(member)
+        controll.saveMembers(members)
 
 if __name__ == "__main__":
     while True:
