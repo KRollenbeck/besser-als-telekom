@@ -41,19 +41,10 @@ def console(input) -> bool:
                         if len(ops) < 3:
                             print("give the name of the member you want to show")
                             return
-                        members = open("members.json")
-                        members = json.load(members)
-                        name = ops[2]
-                        for member in members:
-                            if member["name"] == name:
-                                if len(ops) < 4:
-                                    print(member)
-                                else:
-                                    instances = ops[3].split(",")
-                                    memberDict = {}
-                                    for instance in instances:
-                                        memberDict[instance] = member[instance]
-                                    print(memberDict)
+                        if len(ops) == 3:
+                            print(controll.show(ops[2]))
+                            return
+                        print(controll.show(ops[2], ops[3].split(",")))
                     case "list":
                         members = open("members.json")
                         members = json.load(members)
@@ -144,6 +135,16 @@ class controll:
             calendar.rename(newName)
             return controll.change(name, ["name=" + newName])
         return None
+    def show(name: str, attr: list[str] = []) -> dict:
+        member = controll.getMember(name)
+        if member == None:
+            return None
+        if len(attr) == 0:
+            return member
+        memberOut = {}
+        for arg in attr:
+            memberOut[arg] = member[arg]
+        return memberOut
 
 if __name__ == "__main__":
     while True:
