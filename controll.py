@@ -46,17 +46,12 @@ def console(input) -> bool:
                             return
                         print(controll.show(ops[2], ops[3].split(",")))
                     case "list":
-                        members = open("members.json")
-                        members = json.load(members)
-                        for member in members:
-                            if len(ops) < 3:
-                                print(member["name"])
-                            else:
-                                memberDict = {}
-                                instances = ["name"] + ops[2].split(",")
-                                for instance in instances:
-                                    memberDict[instance] = member[instance]
-                                print(memberDict)
+                        if len(ops) < 3:
+                            for member in controll.loadMembers():
+                                print(member)
+                            return
+                        for member in controll.list(ops[2].split(",")):
+                            print(member)
                     case "availible":
                         if len(ops) < 3:
                             members = calendarAPI.memberCalendars()
@@ -82,7 +77,7 @@ def console(input) -> bool:
 
 
 class controll:
-    def loadMembers() -> dict:
+    def loadMembers() -> list[dict]:
         return json.load(open("members.json"))
     def getMember(name: str) -> dict:
         members = controll.loadMembers()
@@ -145,6 +140,15 @@ class controll:
         for arg in attr:
             memberOut[arg] = member[arg]
         return memberOut
+    def list(attr: list[str] = []) -> list[dict]:
+        members = controll.loadMembers()
+        membersOut = []
+        for member in members:
+            memb = {"name": member["name"]}
+            for arg in attr:
+                memb[arg] = member[arg]
+            membersOut.append(memb)
+        return membersOut
 
 if __name__ == "__main__":
     while True:
