@@ -36,16 +36,7 @@ def console(input) -> bool:
                         if len(ops) < 4:
                             print("give the name and the new name of the member.")
                             return
-                        members = open("members.json")
-                        members = json.load(members)
-                        for member in controll.getMembers(ops[2]):
-                            calendar = calendarAPI.calendar()
-                            calendar.id = member["calendarID"]
-                            calendar.rename(ops[3])
-                            members.remove(member)
-                            member["name"] = ops[3]
-                            members.append(member)
-                        controll.saveMembers(members)
+                        controll.rename(ops[2], ops[3])
                     case "show":
                         if len(ops) < 3:
                             print("give the name of the member you want to show")
@@ -145,6 +136,14 @@ class controll:
             return member
         else:
             return None
+    def rename(name: str, newName: str) -> dict:
+        if controll.getMember(newName) == None:
+            member = controll.getMember(name)
+            calendar = calendarAPI.calendar()
+            calendar.id = member["calendarID"]
+            calendar.rename(newName)
+            return controll.change(name, ["name=" + newName])
+        return None
 
 if __name__ == "__main__":
     while True:
