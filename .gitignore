@@ -5,3 +5,7 @@ members.json
 token.json
 .vscode
 __pycache__
+build
+dist
+*.spec
+console
