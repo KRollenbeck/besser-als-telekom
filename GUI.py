@@ -3,7 +3,7 @@ from tkinter.ttk import *
 
 class TopFrame(tk.Frame):
     def __init__(self, master):
-        super().__init__(master=master, height=20, bg="red")
+        super().__init__(master=master, height=80, bg="red")
         self.pack(fill=tk.BOTH, side=tk.TOP, expand=True)
 
 class SideMenu(tk.Frame):
